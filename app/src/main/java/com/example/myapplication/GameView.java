@@ -13,6 +13,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public final float height;
     private MainThread thread;
     private Ball ball;
+    private Platform platform;
 
     public GameView(Context context, float width, float height) {
         super(context);
@@ -29,6 +30,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
         ball = new Ball(new Vector2(width / 2, height / 10), 50, this);
+        platform = new Platform(new Vector2(width / 2, 9 * height / 10), 500, 50, this);
 
         thread.setRunning(true);
         thread.start();
@@ -55,6 +57,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         ball.update();
+        platform.update();
     }
 
     @Override
@@ -62,6 +65,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if (canvas != null){
             ball.draw(canvas);
+            platform.draw(canvas);
         }
     }
 }
