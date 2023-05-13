@@ -18,7 +18,7 @@ public class Vector2 {
         this.y += vector2.y;
     }
 
-    public Vector2 mul(float num){
+    public Vector2 mul(double num){
         return new Vector2(x * num, y * num);
     }
 

@@ -6,8 +6,8 @@ import android.view.SurfaceHolder;
 public class MainThread extends Thread {
 
     public final static int FPS = 100;
-    private SurfaceHolder surfaceHolder;
-    private GameView gameView;
+    private final SurfaceHolder surfaceHolder;
+    private final GameView gameView;
     private boolean running;
     public static Canvas canvas;
 
@@ -36,7 +36,7 @@ public class MainThread extends Thread {
                     this.gameView.update();
                     this.gameView.draw(canvas);
                 }
-            }catch (Exception e){}
+            }catch (Exception ignored){}
             finally {
                 if (canvas != null){
                     try{

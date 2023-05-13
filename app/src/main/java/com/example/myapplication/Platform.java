@@ -12,7 +12,7 @@ public class Platform {
 
     private float deltaTime;
     private GameView gameView;
-    private Paint platformPaint;
+    private final Paint platformPaint;
     private final float width;
     private final float height;
 
@@ -28,7 +28,7 @@ public class Platform {
         this.position = vector2;
         this.width = width;
         this.height = height;
-        degree = 0;
+        degree = -45;
         this.gameView = gameView;
         deltaTime = 1 / (float) MainThread.FPS;
         platformPaint = new Paint();
@@ -41,7 +41,7 @@ public class Platform {
         return position;
     }
 
-    public boolean haveCollisionWithBall(Vector2 point, float radius) {
+    public boolean haveCollisionWithBall(Vector2 point, double radius) {
         double a = -Math.tan(Math.toRadians(degree));
         double b = 1;
         double c = position.y + position.x * Math.tan(Math.toRadians(degree));
