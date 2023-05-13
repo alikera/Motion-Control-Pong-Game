@@ -29,8 +29,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        ball = new Ball(new Vector2(width / 2, height / 10), 50, this);
-        platform = new Platform(new Vector2(width / 2, 9 * height / 10), 500, 50, this);
+        platform = new Platform(new Vector2(width / 2, 9 * height / 10), width / 3, 25, this);
+        ball = new Ball(new Vector2(width / 2, height / 10), 50, this, platform);
 
         thread.setRunning(true);
         thread.start();
