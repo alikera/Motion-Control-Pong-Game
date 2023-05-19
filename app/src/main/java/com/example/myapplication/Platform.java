@@ -4,11 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.hardware.SensorManager;
 
 import java.lang.Math;
 
 public class Platform {
     private final double G = 9.8 * 200;
+
+    private SensorManager sensorManager;
 
     private float deltaTime;
     private GameView gameView;
@@ -63,6 +66,6 @@ public class Platform {
     }
 
     public void update() {
-
+        position.x = MainActivity.positionX*200;
     }
 }

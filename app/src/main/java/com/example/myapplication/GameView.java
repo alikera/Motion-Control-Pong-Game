@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -14,6 +16,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private Ball ball;
     private Platform platform;
+
 
     public GameView(Context context, float width, float height) {
         super(context);
