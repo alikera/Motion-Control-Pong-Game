@@ -66,6 +66,6 @@ public class Platform {
     }
 
     public void update() {
-        position.x = MainActivity.positionX*200;
+        position.x = MainActivity.positionX;
     }
 }
