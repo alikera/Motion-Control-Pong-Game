@@ -44,13 +44,20 @@ public class MainActivity extends Activity implements SensorEventListener {
         double deltaTime = (double) (event.timestamp - timeStamp ) / 1000000000;
         if (Math.abs(event.values[0]) < 0.05)
             event.values[0] = 0;
-        acceleration = event.values[0] * 0.8 + acceleration * 0.2;
-        positionX += (0.5 * -acceleration * deltaTime * deltaTime + speed * deltaTime) * 2 * width;
-        positionX = positionX > width ? width : positionX;
-        positionX = positionX < 0 ? 0 : positionX;
+        acceleration = -event.values[0] * 0.8 + acceleration * 0.2;
+        positionX += (0.5 * acceleration * deltaTime * deltaTime + speed * deltaTime) * 2 * width;
         speed += acceleration * deltaTime;
+        if (positionX < 0){
+            positionX = 0;
+            speed = 0;
+        }
+        if (positionX > width){
+            positionX = width;
+            speed = 0;
+        }
+
         boolean negative = speed < 0;
-        double temp = Math.abs(speed) - 0.1;
+        double temp = Math.abs(speed);
         speed = (temp < 0 ? 0 : temp) * (negative ? -1 : 1);
         timeStamp = event.timestamp;
         Log.i("speed", String.valueOf(speed));
@@ -64,7 +71,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
