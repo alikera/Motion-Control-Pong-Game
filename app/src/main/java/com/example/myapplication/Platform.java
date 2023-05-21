@@ -31,7 +31,7 @@ public class Platform {
         this.position = vector2;
         this.width = width;
         this.height = height;
-        degree = -45;
+        degree = 0;
         this.gameView = gameView;
         deltaTime = 1 / (float) MainThread.FPS;
         platformPaint = new Paint();
