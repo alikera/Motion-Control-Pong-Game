@@ -19,11 +19,11 @@ public class Platform {
     private final float width;
     private final float height;
 
-    private float degree;
+    private double degree;
     private Vector2 position;
 
 
-    public float getDegree(){
+    public double getDegree(){
         return degree;
     }
 
@@ -67,5 +67,6 @@ public class Platform {
 
     public void update() {
         position.x = MainActivity.positionX;
+        degree = MainActivity.rotation;
     }
 }
