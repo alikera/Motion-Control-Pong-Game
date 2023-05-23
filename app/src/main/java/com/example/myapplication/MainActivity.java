@@ -20,8 +20,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private double speed;
     private double acceleration;
-    private long timeStampAcc;
-    private long timeStampGyr;
+    private long timeStamp;
 
     private int width;
     private SensorManager sensorManager;
@@ -45,9 +44,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (timeStamp == 0) timeStamp = event.timestamp;
+        double deltaTime = (double) (event.timestamp - timeStamp ) / 1000000000;
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            if (timeStampAcc == 0) timeStampAcc = event.timestamp;
-            double deltaTime = (double) (event.timestamp - timeStampAcc ) / 1000000000;
             if (Math.abs(event.values[0]) < 0.3)
                 event.values[0] = 0;
             acceleration = event.values[0] * 0.1 + acceleration * 0.9;
@@ -67,15 +66,13 @@ public class MainActivity extends Activity implements SensorEventListener {
             boolean negative = speed < 0;
             double temp = Math.abs(speed) - 0.2 * deltaTime;
             speed = (temp < 0 ? 0 : temp) * (negative ? -1 : 1);
-            timeStampAcc = event.timestamp;
 //        Log.i("speed", String.valueOf(speed));
-            Log.i("accr", Long.toString(timeStampAcc));
+            Log.i("accr", Long.toString(timeStamp));
         }
         else {
-            if (timeStampGyr == 0) timeStampGyr = event.timestamp;
-            double deltaTime = (double) (event.timestamp - timeStampGyr ) / 1000000000;
-            rotation += event.values[2] * deltaTime;
+            rotation += Math.toDegrees(event.values[2] * deltaTime);
         }
+        timeStamp = event.timestamp;
     }
 
     @Override
