@@ -13,8 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import kotlinx.coroutines.channels.Send;
-
 public class MainActivity extends Activity implements SensorEventListener {
 
     public static double positionX;
@@ -22,7 +20,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private double speed;
     private double acceleration;
-    private long timeStamp;
+    private long timeStampAcc;
+    private long timeStampGyr;
 
     private int width;
     private SensorManager sensorManager;
@@ -38,7 +37,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         width = displayMetrics.widthPixels;
         setContentView(new GameView(this, displayMetrics.widthPixels, displayMetrics.heightPixels));
         positionX = (double) width / 2;
@@ -47,13 +46,15 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            if (timeStamp == 0) timeStamp = event.timestamp;
-            double deltaTime = (double) (event.timestamp - timeStamp ) / 1000000000;
+            if (timeStampAcc == 0) timeStampAcc = event.timestamp;
+            double deltaTime = (double) (event.timestamp - timeStampAcc ) / 1000000000;
             if (Math.abs(event.values[0]) < 0.3)
                 event.values[0] = 0;
             acceleration = event.values[0] * 0.1 + acceleration * 0.9;
-            positionX += (0.5 * acceleration * deltaTime * deltaTime + speed * deltaTime) * 2 * width;
-            speed += acceleration * deltaTime;
+            if (Math.abs(acceleration) < 0.01) acceleration = 0;
+            boolean signEquality = acceleration < 0 == speed < 0;
+            positionX += (0.5 * acceleration * (signEquality ? 1 : 0.1) * deltaTime * deltaTime + speed * deltaTime) * 2 * width;
+            speed += acceleration * deltaTime * (signEquality ? 1 : 0.1);
             if (positionX < 0){
                 positionX = 0;
                 speed = 0;
@@ -66,12 +67,14 @@ public class MainActivity extends Activity implements SensorEventListener {
             boolean negative = speed < 0;
             double temp = Math.abs(speed) - 0.2 * deltaTime;
             speed = (temp < 0 ? 0 : temp) * (negative ? -1 : 1);
-            timeStamp = event.timestamp;
+            timeStampAcc = event.timestamp;
 //        Log.i("speed", String.valueOf(speed));
-            Log.i("accr", Long.toString(timeStamp));
+            Log.i("accr", Long.toString(timeStampAcc));
         }
         else {
-            rotation = Math.toDegrees(event.values[2]);
+            if (timeStampGyr == 0) timeStampGyr = event.timestamp;
+            double deltaTime = (double) (event.timestamp - timeStampGyr ) / 1000000000;
+            rotation += event.values[2] * deltaTime;
         }
     }
 
@@ -84,7 +87,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST, SensorManager.SENSOR_DELAY_FASTEST);
-        sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_FASTEST, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
