@@ -17,6 +17,7 @@ public class BallExtra implements Ball {
     private Vector2 position;
     private Vector2 velocity;
     private boolean collision;
+    private double acceleration;
 
 
     public BallExtra(Vector2 vector2, double radius, GameView gameView, Platform platform) {
@@ -54,7 +55,7 @@ public class BallExtra implements Ball {
         }
         if (!platform.haveCollisionWithBall(position, radius)) {
             collision = false;
-            velocity.add(new Vector2(0, G * deltaTime));
+            velocity.add(new Vector2(0, acceleration * deltaTime));
         }
         position.add(velocity.mul(deltaTime));
     }
@@ -67,6 +68,7 @@ public class BallExtra implements Ball {
     }
 
     public void onAcceleratorSensorChange(float[] values, double time) {
+        acceleration = G + values[1]* 2 * gameView.width;
     }
 
     public void onGyroscopeChange(float[] values, double time) {

@@ -78,23 +78,22 @@ public class PlatformExtra implements Platform {
     }
 
     public void onAcceleratorSensorChange(float[] values, double time) {
-//        double new_acceleration = values[0] * Math.cos(Math.toRadians(degrees[1])) * Math.cos(Math.toRadians(degrees[2]))
-//                + values[1] * Math.sin(Math.toRadians(degrees[1])) * Math.sin(Math.toRadians(degrees[2]))
-//                + values[2] * Math.sin(Math.toRadians(degrees[1])) * Math.cos(Math.toRadians(degrees[2]));
-////        double new_acceleration = values[0];
-//
-//        acceleration = new_acceleration * 0.2 + acceleration * 0.8;
-//        boolean signEquality = ((acceleration < 0) == (velocity < 0));
-//        position.x += (0.5 * acceleration * time * time + velocity * time) * 2 * gameView.width;
-//        velocity += acceleration * time;
-//        if (position.x < 0){
-//            position.x = 0;
-//            velocity = 0;
-//        }
-//        if (position.x > gameView.width){
-//            position.x = gameView.width;
-//            velocity = 0;
-//        }
+        double new_acceleration = values[0] * Math.cos(Math.toRadians(degrees[1])) * Math.cos(Math.toRadians(degrees[2]))
+                + values[1] * Math.sin(Math.toRadians(degrees[1])) * Math.sin(Math.toRadians(degrees[2]))
+                + values[2] * Math.sin(Math.toRadians(degrees[1])) * Math.cos(Math.toRadians(degrees[2]));
+
+        acceleration = new_acceleration * 0.2 + acceleration * 0.8;
+        boolean signEquality = ((acceleration < 0) == (velocity < 0));
+        position.x += (0.5 * acceleration * time * time + velocity * time) * 2 * gameView.width;
+        velocity += acceleration * time;
+        if (position.x < 0){
+            position.x = 0;
+            velocity = 0;
+        }
+        if (position.x > gameView.width){
+            position.x = gameView.width;
+            velocity = 0;
+        }
 
     }
 
@@ -114,6 +113,6 @@ public class PlatformExtra implements Platform {
             position.x = gameView.width;
             velocity = 0;
         }
-        Log.i("accr", Double.toString(degrees[1]));
+//        Log.i("accr", Double.toString(degrees[1]));
     }
 }
