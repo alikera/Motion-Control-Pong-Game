@@ -61,5 +61,8 @@ public class Ball {
 
     public void reset(Vector2 vector) {
         position = vector;
+        velocity.x = 0;
+        velocity.y = 0;
+        collision = false;
     }
 }

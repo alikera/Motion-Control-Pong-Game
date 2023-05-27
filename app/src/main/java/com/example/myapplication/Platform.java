@@ -69,6 +69,11 @@ public class Platform {
 
     public void reset(Vector2 vector2) {
         position = vector2;
+        velocity = 0;
+        acceleration = 0;
+        for (int i = 0; i < 3; i++) {
+            degrees[i] = 0;
+        }
     }
 
     public void onAcceleratorSensorChange(float[] values, double time) {
@@ -89,10 +94,6 @@ public class Platform {
             position.x = gameView.width;
             velocity = 0;
         }
-
-        boolean negative = velocity < 0;
-        double temp = Math.abs(velocity) - 0.1 * time;
-        velocity = (temp < 0 ? 0 : temp) * (negative ? -1 : 1);
 
     }
 
