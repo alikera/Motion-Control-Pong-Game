@@ -88,6 +88,11 @@ public class PlatformNormal implements Platform {
             position.x = gameView.width;
             velocity = 0;
         }
+
+        if (Math.abs(acceleration) <= 0.1) {
+            double temp = Math.abs(velocity) - 0.4 * time;
+            velocity = (temp < 0) ? 0 : (velocity < 0 ? -temp : temp);
+        }
         Log.i("acc", Double.toString(acceleration));
     }
 

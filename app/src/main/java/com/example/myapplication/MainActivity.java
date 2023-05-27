@@ -24,7 +24,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private Sensor rotationSensor;
     private long timeStamp;
     private long timeStamp2;
-    private final boolean isExtra = true;
+    private final boolean isExtra = false;
 
 
     @Override
