@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private Sensor rotationSensor;
     private long timeStamp;
     private long timeStamp2;
+    private final boolean isExtra = true;
 
 
     @Override
@@ -75,7 +76,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         width = displayMetrics.widthPixels;
-        gameView = new GameView(this, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        gameView = new GameView(this, displayMetrics.widthPixels, displayMetrics.heightPixels, isExtra);
         setContentView(gameView);
     }
 

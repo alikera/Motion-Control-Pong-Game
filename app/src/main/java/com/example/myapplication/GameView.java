@@ -2,8 +2,6 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,24 +15,31 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private Ball ball;
     private Platform platform;
+    private boolean isExtra;
 
 
-    public GameView(Context context, float width, float height) {
+    public GameView(Context context, float width, float height, boolean isExtra) {
         super(context);
         getHolder().addCallback(this);
 
         this.height = height;
         this.width = width;
 
-
+        this.isExtra = isExtra;
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        platform = new Platform(new Vector2(width / 2, 9 * height / 10), width / 3, 25, this);
-        ball = new Ball(new Vector2(width / 2, height / 10), 50, this, platform);
+        if (isExtra) {
+            platform = new PlatformExtra(new Vector2(width / 2, 9 * height / 10), width / 3, 25, this);
+            ball = new BallExtra(new Vector2(width / 2, height / 10), 50, this, platform);
+        }
+        else {
+            platform = new PlatformNormal(new Vector2(width / 2, 9 * height / 10), width / 3, 25, this);
+            ball = new BallNormal(new Vector2(width / 2, height / 10), 50, this, platform);
+        }
 
         thread.setRunning(true);
         thread.start();
@@ -83,11 +88,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void onAcceleratorSensor(float[] values, double time) {
         if (platform != null)
             platform.onAcceleratorSensorChange(values, time);
+        if (ball != null)
+            ball.onAcceleratorSensorChange(values, time);
     }
 
     public void onGyroscopeChange(float[] values, double time) {
         if (platform != null)
             platform.onGyroscopeChange(values, time);
+        if (ball != null)
+            ball.onGyroscopeChange(values, time);
     }
 
     private void reset() {
