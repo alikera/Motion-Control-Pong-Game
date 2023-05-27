@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -60,7 +61,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         ball.update();
-        platform.update();
     }
 
     @Override
@@ -70,5 +70,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             ball.draw(canvas);
             platform.draw(canvas);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (platform.haveCollisionWithBall(new Vector2(event.getX(), event.getY()), 10)) {
+            reset();
+        }
+        return true;
+    }
+
+    public void onAcceleratorSensor(float[] values, double time) {
+        if (platform != null)
+            platform.onAcceleratorSensorChange(values, time);
+    }
+
+    public void onGyroscopeChange(float[] values, double time) {
+        if (platform != null)
+            platform.onGyroscopeChange(values, time);
+    }
+
+    private void reset() {
+        ball.reset(new Vector2(width / 2, height / 10));
+        platform.reset(new Vector2(width / 2, 9 * height / 10));
     }
 }
